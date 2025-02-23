@@ -13,10 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "docs",
+            "outputPath": "dist/angular_supabase",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/BlogWebsite/",
             "polyfills": [
               "zone.js"
             ],
