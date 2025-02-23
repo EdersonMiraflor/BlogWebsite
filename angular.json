@@ -16,10 +16,10 @@
             "outputPath": "docs",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/BlogWebsite/",
             "polyfills": [
               "zone.js"
             ],
+            "baseHref": "/BlogWebsite/",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
