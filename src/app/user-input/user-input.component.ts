@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class UserInputComponent implements OnInit {
   blogTitle: string = '';
   blogContent: string = '';
+  blogDate: string = '';
   imageUrl: string = '';
   blogs: any[] = [];
   isUploading: boolean = false;
@@ -28,7 +29,17 @@ export class UserInputComponent implements OnInit {
   }
 
   get isFormValid(): boolean {
-    return this.blogTitle.trim() !== '' && this.blogContent.trim() !== '' && this.imageUrl.trim() !== '';
+    return this.blogTitle.trim() !== '' && this.blogContent.trim() !== '' && this.imageUrl.trim() !== '' && this.blogDate.trim() !== '';
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'long',
+      day: '2-digit',
+      year: 'numeric',
+    }).format(date);
   }
 
   async saveInput() {
@@ -37,10 +48,13 @@ export class UserInputComponent implements OnInit {
       return;
     }
 
+    const formattedDate = this.formatDate(this.blogDate);
+
     const success = await this.supabaseService.insertData(
       this.blogTitle,
       this.blogContent,
-      this.imageUrl
+      formattedDate,
+      this.imageUrl,
     );
 
     if (success) {
@@ -49,6 +63,7 @@ export class UserInputComponent implements OnInit {
       // Reset input fields
       this.blogTitle = '';
       this.blogContent = '';
+      this.blogDate = '';
       this.imageUrl = '';
 
       // Reload blogs to update UI
@@ -66,7 +81,7 @@ export class UserInputComponent implements OnInit {
       this.isUploading = true;
 
       try {
-        const targetWidth = 300; // Changed from 500 to 300 for smaller images
+        const targetWidth = 300; 
         const resizedBlob = await this.resizeImage(file, targetWidth);
         const uniqueFileName = `${Date.now()}-${file.name}`;
         const resizedFile = new File([resizedBlob], uniqueFileName, { type: file.type });

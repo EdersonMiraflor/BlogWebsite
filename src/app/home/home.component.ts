@@ -12,6 +12,7 @@ import { SupabaseService } from '../supabase.service';
 })
 export class HomeComponent implements AfterViewInit {
   blogTitle: string = '';         // Placeholder for blog title input (not used in this version)
+  blogDate: string = '';          // Placeholder for blog date input (not used in this version)
   blogContent: string = '';       // Placeholder for blog content input (not used in this version)
   imageUrl: string = '';          // Placeholder for image URL input (not used in this version)
   blogs: any[] = [];              // Array to store all blogs fetched from Supabase
@@ -24,7 +25,9 @@ export class HomeComponent implements AfterViewInit {
   totalPages: number = 0;         // Total number of pages (calculated based on blog count)
   currentBlogs: any[] = [];       // Array to store blogs displayed on the current page
 
-  // Reference to blog containers in the template for scroll detection
+  // Sorting filter
+  sortOrder: 'oldest' | 'newest' = 'oldest'; // Default to oldest-to-newest
+
   @ViewChildren('blogContainer') blogContainers!: QueryList<ElementRef>;
 
   constructor(private supabaseService: SupabaseService) {}
@@ -38,10 +41,11 @@ export class HomeComponent implements AfterViewInit {
     setTimeout(() => this.onScroll(), 0);
   }
 
-  // Fetch all blogs from Supabase and set up pagination
+  // Fetch all blogs from Supabase, sort by date, and set up pagination
   async loadBlogs() {
     try {
-      this.blogs = await this.supabaseService.getAllBlogs(); // Fetch blogs
+      this.blogs = await this.supabaseService.getAllBlogs(); // Fetch blogs from my_blogs table
+      this.sortBlogs(); // Sort blogs based on current sortOrder
       this.totalPages = Math.ceil(this.blogs.length / this.itemsPerPage); // Calculate total pages
       this.setCurrentBlogs(); // Display the first page of blogs
     } catch (error) {
@@ -50,6 +54,36 @@ export class HomeComponent implements AfterViewInit {
       this.isLoading = false; // Hide loading spinner
       setTimeout(() => this.onScroll(), 0); // Update centered blog index
     }
+  }
+
+  // Sort blogs based on the selected sortOrder
+  sortBlogs() {
+    this.blogs.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return this.sortOrder === 'oldest'
+        ? dateA.getTime() - dateB.getTime() // Oldest to newest
+        : dateB.getTime() - dateA.getTime(); // Newest to oldest
+    });
+    this.currentPage = 1; // Reset to first page after sorting
+    this.setCurrentBlogs(); // Update displayed blogs
+  }
+
+  // Handle sort order change from dropdown
+  onSortChange(order: 'oldest' | 'newest') {
+    this.sortOrder = order;
+    this.sortBlogs();
+  }
+
+  // Format date from YYYY-MM-DD to "Month DD, YYYY"
+  formatDate(dateStr: string): string {
+    if (!dateStr) return 'Unknown Date';
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'long',
+      day: '2-digit',
+      year: 'numeric',
+    }).format(date);
   }
 
   // Update the currentBlogs array based on the current page
@@ -61,21 +95,20 @@ export class HomeComponent implements AfterViewInit {
 
   // Navigate to the previous page
   prevPage() {
-    if (this.currentPage > 1) {         // Check if not on the first page
-      this.currentPage = this.currentPage - 1; // Decrease page number
-      this.setCurrentBlogs();           // Update displayed blogs
+    if (this.currentPage > 1) {
+      this.currentPage = this.currentPage - 1;
+      this.setCurrentBlogs();
     }
   }
 
   // Navigate to the next page
   nextPage() {
-    if (this.currentPage < this.totalPages) { // Check if not on the last page
-      this.currentPage = this.currentPage + 1; // Increase page number
-      this.setCurrentBlogs();                 // Update displayed blogs
+    if (this.currentPage < this.totalPages) {
+      this.currentPage = this.currentPage + 1;
+      this.setCurrentBlogs();
     }
   }
 
-  // Listen to scroll events to highlight the centered blog
   @HostListener('window:scroll')
   onScroll() {
     if (!this.blogContainers) return; // Exit if blog containers aren't available
@@ -83,7 +116,6 @@ export class HomeComponent implements AfterViewInit {
     const viewportCenter = window.innerHeight / 2; // Middle of the viewport
     let centeredIndex = -1;
 
-    // Check each blog container to find the one in the center
     this.blogContainers.forEach((container, index) => {
       const rect = container.nativeElement.getBoundingClientRect();
       if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {

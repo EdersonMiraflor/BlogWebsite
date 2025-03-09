@@ -13,10 +13,10 @@ export class SupabaseService {
   }
 
   // Insert data into the blog table
-  async insertData(title: string, content: string, imageUrl: string): Promise<boolean> {
+  async insertData(title: string, content: string, date: string, imageUrl: string): Promise<boolean> {
     const { error } = await this.supabase
       .from('my_blogs') // Ensure the table name is correct
-      .insert([{ blog_title: title, blog_content: content, image_url: imageUrl }]); // Use correct column names
+      .insert([{ blog_title: title, blog_content: content, date: date, image_url: imageUrl }]); // Use correct column names
   
     if (error) {
       console.error('Error inserting data:', error);
