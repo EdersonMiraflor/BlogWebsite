@@ -2,11 +2,12 @@ import { Component, ViewChildren, QueryList, ElementRef, AfterViewInit, HostList
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
+import { TechStackComponent } from '../tech-stack/tech-stack.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TechStackComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

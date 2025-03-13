@@ -109,17 +109,18 @@ export class UserInputComponent implements OnInit {
       img.onload = () => {
         const aspectRatio = img.height / img.width;
         const targetHeight = targetWidth * aspectRatio;
-
+  
         const canvas = document.createElement('canvas');
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-
+  
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
           canvas.toBlob(
             (blob) => {
               if (blob) {
+                console.log(`Resized to ${targetWidth}x${targetHeight}px`); // Debug log
                 resolve(blob);
               } else {
                 reject(new Error('Failed to create blob'));

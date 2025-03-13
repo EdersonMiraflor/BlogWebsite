@@ -36,10 +36,10 @@ export class SupabaseService {
       return { publicUrl: null, error };
     }
 
-    // Retrieve the public URL correctly
+    // Retrieve the public URL with image transformation (e.g., width=300)
     const { data: urlData } = this.supabase.storage
-      .from('blog-images') // Ensure the correct bucket name is used here
-      .getPublicUrl(filePath);
+      .from('blog-images')
+      .getPublicUrl(filePath, { transform: { width: 300, height: undefined } }); // Use undefined for height to maintain aspect ratio
 
     return { publicUrl: urlData.publicUrl };
   }
@@ -47,7 +47,7 @@ export class SupabaseService {
   async getAllBlogs() {
     const { data, error } = await this.supabase
       .from('my_blogs') // Ensure table name is correct
-      .select('*') // Fetch all records
+      .select('*'); // Fetch all records
   
     if (error) {
       console.error('Error fetching data:', error);
@@ -55,5 +55,4 @@ export class SupabaseService {
     }
     return data;
   }
-  
 }

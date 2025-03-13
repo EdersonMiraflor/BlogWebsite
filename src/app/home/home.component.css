@@ -1,0 +1,31 @@
+@keyframes typewriter {
+    0% {
+      width: 0%;
+    }
+    30% {
+      width: 19%;
+    }
+    60% {
+      width: 19%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  .animate-typing {
+    animation: 
+      typewriter 7s steps(15) infinite,
+      blink 0.75s step-end infinite;
+  }
+  
+  .animate-typing {
+    white-space: nowrap;
+    overflow: hidden;
+  }

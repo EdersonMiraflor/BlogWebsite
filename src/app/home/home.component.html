@@ -3,8 +3,8 @@
   <div class="h-screen w-full flex flex-col sm:flex-row items-center justify-between px-10 bg-gray-900 relative">
     <!-- Left Side: Text -->
     <div id="Top" class="sm:w-1/2 text-left text-white">
-      <h1 class="text-5xl font-bold">Welcome to My Blog Website</h1>
-      <p class="mt-4 text-lg">
+      <h1 class="whitespace-nowrap text-5xl font-bold">Welcome to My Blog Website</h1>
+      <p class="mt-4 text-lg text-justify">
         This blog serves as our daily journal during our On-the-Job Training (OJT), where we document our tasks, experiences, and learnings. Each entry includes a summary of our activities, challenges, and progress, along with images capturing key moments. Through this, we can track our growth and reflect on our journey. It also serves as a guide for future trainees to gain insights into the OJT experience.
       </p>
     </div>
@@ -29,11 +29,11 @@
   </div>
 
   <!-- Below Content (Your Blogs Section) -->
-  <div class="p-4 rounded-lg bg-[#1e293b] animate-pulse [animation-duration:20s] italic">
-    <h1 class="text-white md:font-italic place-self-center pb-10 text-6xl font-bold italic animate-pulse [animation-duration:5s]">
+  <div class="flex items-center justify-center p-4 rounded-lg bg-[#1e293b] animate-pulse [animation-duration:20s] italic">
+    <h1 class="text-white md:font-italic text-center p-7 italic animate-typing border-r border-r-white text-6xl">
       OJT Blogs
     </h1>
-  </div>
+</div>
 
   <div class="group py-10 px-10 bg-gray-900">
     <!-- Sorting Filter -->
@@ -90,7 +90,7 @@
       </div>
       <p class="text-white">Page {{ currentPage }} of {{ totalPages }}</p>
     </div>
-
+    <app-tech-stack></app-tech-stack>
     <!-- "Go to Top" Button -->
     <div class="bg-gray-900 py-4">
       <button onclick="location.href='#Top'"
