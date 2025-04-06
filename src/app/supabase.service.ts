@@ -36,10 +36,10 @@ export class SupabaseService {
       return { publicUrl: null, error };
     }
 
-    // Retrieve the public URL with image transformation (e.g., width=300)
+    // Retrieve the public URL without transformation
     const { data: urlData } = this.supabase.storage
       .from('blog-images')
-      .getPublicUrl(filePath, { transform: { width: 300, height: undefined } }); // Use undefined for height to maintain aspect ratio
+      .getPublicUrl(filePath);
 
     return { publicUrl: urlData.publicUrl };
   }
