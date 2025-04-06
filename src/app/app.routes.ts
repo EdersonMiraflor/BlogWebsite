@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { UserInputComponent } from './user-input/user-input.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
@@ -6,19 +7,29 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
+        component: HomeComponent 
     },
     {
         path: 'home',
-        component:HomeComponent
+        redirectTo: '', 
+        pathMatch: 'full'
     },
     {
         path: 'user-input',
-        component:UserInputComponent
+        component: UserInputComponent
     },
     {
         path: 'about',
-        component:ContactComponent
+        component: ContactComponent
+    },
+    {
+        path: '**',
+        redirectTo: ''
     }
 ];
+
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }
